@@ -7,8 +7,8 @@ const { isSeller, isAdmin, isAuthenticated } = require("../middleware/auth");
 const router = express.Router();
 const cloudinary = require("cloudinary");
 const upload = require("../middleware/upload");
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 // create event
 router.post(
   "/create-event",
@@ -54,12 +54,10 @@ router.post(
           // add image in upload folder
           console.log("Images: ");
           var buff = Buffer.from(images[i].split(";base64,").pop(), "base64");
-          fs.writeFileSync(
-            path.join(uploadDir, `${event_id}.png`),
-            buff
-          );
+          fs.writeFileSync(path.join(uploadDir, `${event_id}.png`), buff);
           imagesLinks.push({
-            path: path_to_save + shopId + "/" + event_id + "/" + event_id + ".png",
+            path:
+              path_to_save + shopId + "/" + event_id + "/" + event_id + ".png",
           });
         }
 
@@ -117,10 +115,8 @@ router.delete(
 
       if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
-      }    
+      }
 
-     
-    
       await event.remove();
       console.log("Deleted", req.params.id);
       res.status(201).json({

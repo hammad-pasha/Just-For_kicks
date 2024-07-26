@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated, isAdmin } = require("../middleware/auth");
+const upload = require("../middleware/upload");
 
 // create user
 router.post("/create-user", async (req, res, next) => {
@@ -25,7 +26,7 @@ router.post("/create-user", async (req, res, next) => {
     const user = {
       name: name,
       email: email,
-      password: password
+      password: password,
     };
 
     const activationToken = createActivationToken(user);
@@ -72,7 +73,7 @@ router.post(
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password} = newUser;
+      const { name, email, password } = newUser;
       console.log("new user", newUser);
       let user = await User.findOne({ email });
 
@@ -206,34 +207,18 @@ router.put(
 );
 
 // update user avatar
-router.put(
-  "/update-avatar",
+router.route("/update-avatar").put(
   isAuthenticated,
+  upload.single("avatar"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      let existsUser = await User.findById(req.user.id);
-      if (req.body.avatar !== "") {
-        const imageId = existsUser.avatar.public_id;
+      const user = await User.findByIdAndUpdate(
+        req.user.id,
+        { $set: { avatar: { url: req.file.path?.split("\\")[2] } } },
+        { new: true }
+      );
 
-        // await cloudinary.v2.uploader.destroy(imageId);
-
-        // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-        //   folder: "avatars",
-        //   width: 150,
-        // });
-
-        // existsUser.avatar = {
-        //   public_id: myCloud.public_id,
-        //   url: myCloud.secure_url,
-        // };
-      }
-
-      // await existsUser.save();
-
-      res.status(200).json({
-        success: true,
-        user: existsUser,
-      });
+      res.status(200).json({ success: true, user: user });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

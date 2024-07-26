@@ -21,30 +21,21 @@ const ShopSettings = () => {
   const dispatch = useDispatch();
 
   const handleImage = async (e) => {
-    const reader = new FileReader();
+    const formData = new FormData();
+    formData.append("avatar", e.target.files[0]);
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatar(reader.result);
-        axios
-          .put(
-            `${server}/shop/update-shop-avatar`,
-            { avatar: reader.result },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            dispatch(loadSeller());
-            toast.success("Avatar updated successfully!");
-          })
-          .catch((error) => {
-            toast.error(error.response.data.message);
-          });
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
+    setAvatar(e.target.files[0]);
+    axios
+      .put(`${server}/shop/update-shop-avatar`, formData, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch(loadSeller());
+        toast.success("Avatar updated successfully!");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   };
 
   const updateHandler = async (e) => {
@@ -76,22 +67,22 @@ const ShopSettings = () => {
       <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5">
         <div className="w-full flex items-center justify-center">
           <div className="relative">
-            <img
-              src={avatar ? avatar : `${seller.avatar?.url}`}
-              alt=""
-              className="w-[200px] h-[200px] rounded-full cursor-pointer"
-            />
-            <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
-              <input
-                type="file"
-                id="image"
-                className="hidden"
-                onChange={handleImage}
+            <label htmlFor="image">
+              <img
+                src={avatar ? avatar : `${backend_url}/${seller.avatar?.url}`}
+                alt=""
+                className="w-[200px] h-[200px] rounded-full cursor-pointer"
               />
-              <label htmlFor="image">
+              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
+                <input
+                  type="file"
+                  id="image"
+                  className="hidden"
+                  onChange={handleImage}
+                />
                 <AiOutlineCamera />
-              </label>
-            </div>
+              </div>
+            </label>
           </div>
         </div>
 

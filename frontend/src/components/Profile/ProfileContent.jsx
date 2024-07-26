@@ -5,7 +5,7 @@ import {
   AiOutlineDelete,
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { server } from "../../server";
+import { backend_url, server } from "../../server";
 import styles from "../../styles/styles";
 import { DataGrid } from "@material-ui/data-grid";
 import { Button } from "@material-ui/core";
@@ -50,30 +50,20 @@ const ProfileContent = ({ active }) => {
   };
 
   const handleImage = async (e) => {
-    const reader = new FileReader();
+    const formData = new FormData();
+    formData.append("avatar", e.target.files[0]);
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatar(reader.result);
-        axios
-          .put(
-            `${server}/user/update-avatar`,
-            { avatar: reader.result },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((response) => {
-            dispatch(loadUser());
-            toast.success("avatar updated successfully!");
-          })
-          .catch((error) => {
-            toast.error(error);
-          });
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
+    axios
+      .put(`${server}/user/update-avatar`, formData, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        dispatch(loadUser());
+        toast.success("avatar updated successfully!");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
   };
 
   return (
@@ -83,22 +73,22 @@ const ProfileContent = ({ active }) => {
         <>
           <div className="flex justify-center w-full">
             <div className="relative">
-              <img
-                src={`${user?.avatar?.url}`}
-                className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
-                alt=""
-              />
-              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-                <input
-                  type="file"
-                  id="image"
-                  className="hidden"
-                  onChange={handleImage}
+              <label htmlFor="image">
+                <img
+                  src={`${backend_url}/${user?.avatar?.url}`}
+                  className="w-[150px] cursor-pointer h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
+                  alt=""
                 />
-                <label htmlFor="image">
+                <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
+                  <input
+                    type="file"
+                    id="image"
+                    className="hidden"
+                    onChange={handleImage}
+                  />
                   <AiOutlineCamera />
-                </label>
-              </div>
+                </div>
+              </label>
             </div>
           </div>
           <br />

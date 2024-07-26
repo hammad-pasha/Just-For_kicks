@@ -10,13 +10,14 @@ import {
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
-import { DropDown, ShoeSizeDropDown } from './DropDown'
+import { DropDown, PriceDropDown, ShoeSizeDropDown } from "./DropDown";
 import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
 import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
-import mainLogo from'../../Black_and_White_Monogram_Business_Logo-removebg-preview.png';
+import mainLogo from "../../Black_and_White_Monogram_Business_Logo-removebg-preview.png";
+import { backend_url } from "../../server";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -29,6 +30,7 @@ const Header = ({ activeHeading }) => {
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [sizeDropDown, setShoeSizeDropDown] = useState(false);
+  const [showPriceDropDown, setShowPriceDropDown] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
@@ -53,16 +55,15 @@ const Header = ({ activeHeading }) => {
     }
   });
 
+  console.log({ user });
+
   return (
     <>
       <div className={`${styles.section}`}>
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
-              <img
-                src={mainLogo}
-                alt=""
-              />
+              <img src={mainLogo} alt="" />
             </Link>
           </div>
           {/* search box */}
@@ -119,7 +120,7 @@ const Header = ({ activeHeading }) => {
         >
           {/* categories */}
           <div onClick={() => setDropDown(!dropDown)}>
-            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+            <div className="relative h-[60px] mt-[10px] w-[200px] hidden 1000px:block">
               <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
               <button
                 className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
@@ -141,7 +142,7 @@ const Header = ({ activeHeading }) => {
           </div>
           {/* Shoe Size Filter DropDown */}
           <div onClick={() => setShoeSizeDropDown(!sizeDropDown)}>
-            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+            <div className="relative h-[60px] mt-[10px] w-[180px] hidden 1000px:block">
               <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
               <button
                 className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
@@ -158,6 +159,24 @@ const Header = ({ activeHeading }) => {
                   shoeSizeData={shoeSizeData}
                   setShoeSizeDropDown={setShoeSizeDropDown}
                 />
+              ) : null}
+            </div>
+          </div>
+          <div onClick={() => setShowPriceDropDown(!showPriceDropDown)}>
+            <div className="relative h-[60px] mt-[10px] w-[180px] hidden 1000px:block">
+              <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
+              <button
+                className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
+              >
+                Price
+              </button>
+              <IoIosArrowDown
+                size={20}
+                className="absolute right-2 top-4 cursor-pointer"
+                onClick={() => setShoeSizeDropDown(!sizeDropDown)}
+              />
+              {showPriceDropDown ? (
+                <PriceDropDown setShowPriceDropDown={setShowPriceDropDown} />
               ) : null}
             </div>
           </div>
@@ -199,8 +218,8 @@ const Header = ({ activeHeading }) => {
                 {isAuthenticated ? (
                   <Link to="/profile">
                     <img
-                      src={`${user?.avatar?.url}`}
-                      className="w-[35px] h-[35px] rounded-full"
+                      src={`${backend_url}/${user?.avatar?.url}`}
+                      className="w-[35px] h-[35px] rounded-full object-cover"
                       alt=""
                     />
                   </Link>
@@ -240,11 +259,7 @@ const Header = ({ activeHeading }) => {
           </div>
           <div>
             <Link to="/">
-              <img
-                src={mainLogo}
-                alt=""
-                className="mt-3 cursor-pointer"
-              />
+              <img src={mainLogo} alt="" className="mt-3 cursor-pointer" />
             </Link>
           </div>
           <div>
@@ -338,9 +353,9 @@ const Header = ({ activeHeading }) => {
                   <div>
                     <Link to="/profile">
                       <img
-                        src={`${user.avatar?.url}`}
+                        src={`${backend_url}/${user?.avatar?.url}`}
                         alt=""
-                        className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
+                        className="w-[60px] h-[60px] rounded-full object-cover border-[3px] border-[#0eae88]"
                       />
                     </Link>
                   </div>

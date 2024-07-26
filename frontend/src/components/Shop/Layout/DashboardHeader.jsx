@@ -5,18 +5,16 @@ import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import mainLogo from'../../../Black_and_White_Monogram_Business_Logo-removebg-preview.png';
+import mainLogo from "../../../Black_and_White_Monogram_Business_Logo-removebg-preview.png";
+import { backend_url } from "../../../server";
 
 const DashboardHeader = () => {
   const { seller } = useSelector((state) => state.seller);
   return (
-    <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
+    <div className="w-full overflow-y-hidden h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
         <Link to="/dashboard">
-          <img
-            src={mainLogo}
-            alt=""
-          />
+          <img src={mainLogo} alt="" />
         </Link>
       </div>
       <div className="flex items-center">
@@ -54,7 +52,7 @@ const DashboardHeader = () => {
           </Link>
           <Link to={`/shop/${seller._id}`}>
             <img
-              src={`${seller.avatar?.url}`}
+              src={`${backend_url}/${seller.avatar?.url}`}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
             />

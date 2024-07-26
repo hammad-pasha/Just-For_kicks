@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
-import { server } from "../../server";
+import { backend_url, server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
@@ -13,7 +13,7 @@ const ENDPOINT = "https://socket-ecommerce-tu68.onrender.com/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const DashboardMessages = () => {
-  const { seller,isLoading } = useSelector((state) => state.seller);
+  const { seller, isLoading } = useSelector((state) => state.seller);
   const [conversations, setConversations] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentChat, setCurrentChat] = useState();
@@ -260,7 +260,7 @@ const MessageList = ({
   setUserData,
   online,
   setActiveStatus,
-  isLoading
+  isLoading,
 }) => {
   console.log(data);
   const [user, setUser] = useState([]);
@@ -300,9 +300,9 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${user?.avatar?.url}`}
+          src={`${backend_url}/${user?.avatar?.url}`}
           alt=""
-          className="w-[50px] h-[50px] rounded-full"
+          className="w-[50px] h-[50px] rounded-full object-cover"
         />
         {online ? (
           <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
@@ -339,11 +339,11 @@ const SellerInbox = ({
     <div className="w-full min-h-full flex flex-col justify-between">
       {/* message header */}
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
-        <div className="flex">
+        <div className="flex items-center">
           <img
-            src={`${userData?.avatar?.url}`}
+            src={`${backend_url}/${userData?.avatar?.url}`}
             alt=""
-            className="w-[60px] h-[60px] rounded-full"
+            className="w-[60px] h-[60px] rounded-full object-cover"
           />
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
@@ -370,13 +370,14 @@ const SellerInbox = ({
               >
                 {item.sender !== sellerId && (
                   <img
-                    src={`${userData?.avatar?.url}`}
-                    className="w-[40px] h-[40px] rounded-full mr-3"
+                    src={`${backend_url}/${userData?.avatar?.url}`}
+                    className="w-[40px] h-[40px] rounded-full object-cover mr-3"
                     alt=""
                   />
                 )}
                 {item.images && (
                   <img
+                    alt={userData?.name}
                     src={`${item.images?.url}`}
                     className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
                   />

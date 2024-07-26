@@ -7,9 +7,9 @@ const Order = require("../model/order");
 const Shop = require("../model/shop");
 // const cloudinary = require("cloudinary");
 const ErrorHandler = require("../utils/ErrorHandler");
-const upload = require('../middleware/upload');
-const path = require('path');
-const fs = require('fs');
+const upload = require("../middleware/upload");
+const path = require("path");
+const fs = require("fs");
 // create product
 router.post(
   "/create-product",
@@ -32,10 +32,10 @@ router.post(
         } else {
           images = req.body.images;
         }
-      
+
         // Ensure uploads directory exists
         const imagesLinks = [];
-        
+
         const productData = req.body;
         productData.images = imagesLinks;
         productData.shop = shop;
@@ -44,7 +44,12 @@ router.post(
         const product = await Product.create(productData);
         let product_id = product._id.toString();
         console.log("Product ID: ", product_id);
-        const uploadDir = path.join(__dirname, '../../frontend/public/uploads', shopId, product_id);
+        const uploadDir = path.join(
+          __dirname,
+          "../../frontend/public/uploads",
+          shopId,
+          product_id
+        );
         console.log("Upload Dir: ", uploadDir);
         if (!fs.existsSync(uploadDir)) {
           fs.mkdirSync(uploadDir, { recursive: true });
@@ -53,10 +58,17 @@ router.post(
         for (let i = 0; i < images.length; i++) {
           // add image in upload folder
           console.log("Images: ");
-          var buff = Buffer.from(images[i].split(';base64,').pop(), 'base64');
+          var buff = Buffer.from(images[i].split(";base64,").pop(), "base64");
           fs.writeFileSync(path.join(uploadDir, `${product_id}.png`), buff);
           imagesLinks.push({
-            path: path_to_save + shopId + "/" + product_id + "/" + product_id + ".png",
+            path:
+              path_to_save +
+              shopId +
+              "/" +
+              product_id +
+              "/" +
+              product_id +
+              ".png",
           });
         }
         console.log("Images Links: ");
@@ -69,7 +81,7 @@ router.post(
         });
       }
     } catch (error) {
-      console.log({error});
+      console.log({ error });
       return next(new ErrorHandler(error, 400));
     }
   })
@@ -102,14 +114,14 @@ router.delete(
 
       if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
-      }    
+      }
 
       // for (let i = 0; 1 < product.images.length; i++) {
       //   const result = await cloudinary.v2.uploader.destroy(
       //     product.images[i].public_id
       //   );
       // }
-    
+
       await product.remove();
 
       res.status(201).json({
@@ -129,7 +141,7 @@ router.get(
     try {
       const products = await Product.find().sort({ createdAt: -1 });
 
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         products,
       });

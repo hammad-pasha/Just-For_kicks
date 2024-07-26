@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
+import { priceSortData } from "../../static/data";
 
 export const ShoeSizeDropDown = ({ shoeSizeData, setShoeSizeDropDown }) => {
   const navigate = useNavigate();
@@ -21,6 +22,28 @@ export const ShoeSizeDropDown = ({ shoeSizeData, setShoeSizeDropDown }) => {
             <h3 className="m-3 cursor-pointer select-none">{i.size}</h3>
           </div>
         ))}
+    </div>
+  );
+};
+
+export const PriceDropDown = ({ setShowPriceDropDown }) => {
+  const navigate = useNavigate();
+  const submitHandle = (value) => {
+    navigate(`/products?price=${value}`);
+    setShowPriceDropDown(false);
+    window.location.reload();
+  };
+  return (
+    <div className="pb-4 w-[270px] bg-[#fff] absolute z-30 rounded-b-md shadow-sm">
+      {priceSortData.map((i) => (
+        <div
+          key={i.value}
+          className={`${styles.noramlFlex}`}
+          onClick={() => submitHandle(i.value)}
+        >
+          <h3 className="m-3 cursor-pointer select-none">{i.label}</h3>
+        </div>
+      ))}
     </div>
   );
 };
