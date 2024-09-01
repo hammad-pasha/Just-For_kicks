@@ -63,7 +63,7 @@ const Header = ({ activeHeading }) => {
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
-              <img src={mainLogo} alt="" />
+              <img className="-z-30" src={mainLogo} alt="" />
             </Link>
           </div>
           {/* search box */}
@@ -257,7 +257,7 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpen(true)}
             />
           </div>
-          <div className="w-full h-12 sticky top-0 left-0 flex items-center justify-between px-4">
+          <div className="w-full h-12 sticky overflow-hidden top-0 left-0 flex items-center justify-between px-4">
             <Link to="/">
               <img src={mainLogo} alt="" className="mt-3 cursor-pointer" />
             </Link>

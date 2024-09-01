@@ -110,21 +110,13 @@ router.delete(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const product = await Product.findById(req.params.id);
+      const product = await Product.findByIdAndRemove(req.params.id);
 
       if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
       }
 
-      // for (let i = 0; 1 < product.images.length; i++) {
-      //   const result = await cloudinary.v2.uploader.destroy(
-      //     product.images[i].public_id
-      //   );
-      // }
-
-      await product.remove();
-
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: "Product Deleted successfully!",
       });

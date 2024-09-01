@@ -111,15 +111,13 @@ router.delete(
   "/delete-shop-event/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const event = await Event.findById(req.params.id);
+      const event = await Event.findByIdAndRemove(req.params.id);
 
       if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
       }
 
-      await event.remove();
-      console.log("Deleted", req.params.id);
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: "Event Deleted successfully!",
       });
