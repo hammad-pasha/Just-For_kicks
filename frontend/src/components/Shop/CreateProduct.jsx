@@ -195,6 +195,7 @@ const CreateProduct = () => {
           <input
             type="number"
             name="price"
+            max={originalPrice}
             value={discountPrice}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={(e) => setDiscountPrice(e.target.value)}
@@ -210,6 +211,7 @@ const CreateProduct = () => {
             type="number"
             name="price"
             value={stock}
+            min={1}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={(e) => setStock(e.target.value)}
             placeholder="Enter your product stock..."

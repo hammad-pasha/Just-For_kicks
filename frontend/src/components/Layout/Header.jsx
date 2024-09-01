@@ -63,7 +63,7 @@ const Header = ({ activeHeading }) => {
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
-              <img src={mainLogo} alt="" />
+              <img className="-z-30" src={mainLogo} alt="" />
             </Link>
           </div>
           {/* search box */}
@@ -100,7 +100,7 @@ const Header = ({ activeHeading }) => {
             ) : null}
           </div>
 
-          <div className={`${styles.button}`}>
+          <div className={`${styles.button} ml-2`}>
             <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
               <h1 className="text-[#fff] flex items-center">
                 {isSeller ? "Go Dashboard" : "Become Seller"}{" "}
@@ -257,7 +257,7 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpen(true)}
             />
           </div>
-          <div>
+          <div className="w-full h-12 sticky overflow-hidden top-0 left-0 flex items-center justify-between px-4">
             <Link to="/">
               <img src={mainLogo} alt="" className="mt-3 cursor-pointer" />
             </Link>
@@ -300,7 +300,7 @@ const Header = ({ activeHeading }) => {
                 </div>
                 <RxCross1
                   size={30}
-                  className="ml-4 mt-5"
+                  className="ml-4 mt-5 cursor-pointer"
                   onClick={() => setOpen(false)}
                 />
               </div>
@@ -313,6 +313,84 @@ const Header = ({ activeHeading }) => {
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
+                <div className={` relative grid grid-cols-2 gap-4`}>
+                  {/* categories */}
+                  <div
+                    className="col-span-2"
+                    onClick={() => setDropDown(!dropDown)}
+                  >
+                    <div className="relative h-[60px] mt-[10px] ">
+                      <BiMenuAltLeft
+                        size={30}
+                        className="absolute top-3 left-2"
+                      />
+                      <button
+                        className={`h-[100%] w-full flex justify-between items-center pl-10 bg-gray-200 font-sans text-lg font-[500] select-none rounded-t-md`}
+                      >
+                        All Categories
+                      </button>
+                      <IoIosArrowDown
+                        size={20}
+                        className="absolute right-2 top-4 cursor-pointer"
+                        onClick={() => setDropDown(!dropDown)}
+                      />
+                      {dropDown ? (
+                        <DropDown
+                          categoriesData={categoriesData}
+                          setDropDown={setDropDown}
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                  {/* Shoe Size Filter DropDown */}
+                  <div onClick={() => setShoeSizeDropDown(!sizeDropDown)}>
+                    <div className="relative h-[60px]  ">
+                      <BiMenuAltLeft
+                        size={30}
+                        className="absolute top-3 left-2"
+                      />
+                      <button
+                        className={`h-[100%] w-full flex justify-between items-center pl-10 bg-gray-200 font-sans text-lg font-[500] select-none rounded-t-md`}
+                      >
+                        Shoe Size
+                      </button>
+                      <IoIosArrowDown
+                        size={20}
+                        className="absolute right-2 top-4 cursor-pointer"
+                        onClick={() => setShoeSizeDropDown(!sizeDropDown)}
+                      />
+                      {sizeDropDown ? (
+                        <ShoeSizeDropDown
+                          shoeSizeData={shoeSizeData}
+                          setShoeSizeDropDown={setShoeSizeDropDown}
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                  <div onClick={() => setShowPriceDropDown(!showPriceDropDown)}>
+                    <div className="relative h-[60px]  ">
+                      <BiMenuAltLeft
+                        size={30}
+                        className="absolute top-3 left-2"
+                      />
+                      <button
+                        className={`h-[100%] w-full flex justify-between items-center pl-10 bg-gray-200 font-sans text-lg font-[500] select-none rounded-t-md`}
+                      >
+                        Price
+                      </button>
+                      <IoIosArrowDown
+                        size={20}
+                        className="absolute right-2 top-4 cursor-pointer"
+                        onClick={() => setShoeSizeDropDown(!sizeDropDown)}
+                      />
+                      {showPriceDropDown ? (
+                        <PriceDropDown
+                          setShowPriceDropDown={setShowPriceDropDown}
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
                 {searchData && (
                   <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
                     {searchData.map((i) => {

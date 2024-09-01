@@ -11,7 +11,7 @@ export const ShoeSizeDropDown = ({ shoeSizeData, setShoeSizeDropDown }) => {
     window.location.reload();
   };
   return (
-    <div className="pb-4 w-[270px] bg-[#fff] absolute z-30 rounded-b-md shadow-sm">
+    <div className="w-full bg-gray-200 absolute z-30 rounded-b-md shadow-sm">
       {shoeSizeData &&
         shoeSizeData.map((i, index) => (
           <div
@@ -19,7 +19,9 @@ export const ShoeSizeDropDown = ({ shoeSizeData, setShoeSizeDropDown }) => {
             className={`${styles.noramlFlex}`}
             onClick={() => submitHandle(i)}
           >
-            <h3 className="m-3 cursor-pointer select-none">{i.size}</h3>
+            <h3 className="p-4 cursor-pointer hover:bg-slate-300 w-full select-none">
+              {i.size}
+            </h3>
           </div>
         ))}
     </div>
@@ -34,14 +36,16 @@ export const PriceDropDown = ({ setShowPriceDropDown }) => {
     window.location.reload();
   };
   return (
-    <div className="pb-4 w-[270px] bg-[#fff] absolute z-30 rounded-b-md shadow-sm">
+    <div className="w-full bg-gray-200 absolute z-30 rounded-b-md shadow-sm">
       {priceSortData.map((i) => (
         <div
           key={i.value}
           className={`${styles.noramlFlex}`}
           onClick={() => submitHandle(i.value)}
         >
-          <h3 className="m-3 cursor-pointer select-none">{i.label}</h3>
+          <h3 className="p-4 cursor-pointer hover:bg-slate-300 w-full select-none">
+            {i.label}
+          </h3>
         </div>
       ))}
     </div>
@@ -56,12 +60,12 @@ export const DropDown = ({ categoriesData, setDropDown }) => {
     window.location.reload();
   };
   return (
-    <div className="pb-4 w-[270px] bg-[#fff] absolute z-30 rounded-b-md shadow-sm">
+    <div className="w-full bg-gray-200 absolute z-30 rounded-b-md shadow-sm">
       {categoriesData &&
         categoriesData.map((i, index) => (
           <div
             key={index}
-            className={`${styles.noramlFlex}`}
+            className="flex items-center gap-2 p-2 cursor-pointer hover:bg-slate-300 w-full select-none"
             onClick={() => submitHandle(i)}
           >
             <img
@@ -75,7 +79,7 @@ export const DropDown = ({ categoriesData, setDropDown }) => {
               }}
               alt=""
             />
-            <h3 className="m-3 cursor-pointer select-none">{i.title}</h3>
+            <h3>{i.title}</h3>
           </div>
         ))}
     </div>
