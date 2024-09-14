@@ -190,6 +190,26 @@ export const brandingData = [
 // shoe size data
 export const shoeSizeData = [
   {
+    id: 7,
+    size: "1",
+  },
+  {
+    id: 8,
+    size: "2",
+  },
+  {
+    id: 9,
+    size: "3",
+  },
+  {
+    id: 10,
+    size: "4",
+  },
+  {
+    id: 10,
+    size: "5",
+  },
+  {
     id: 1,
     size: "6",
   },
@@ -208,6 +228,10 @@ export const shoeSizeData = [
   {
     id: 5,
     size: "10",
+  },
+  {
+    id: 6,
+    size: "26",
   },
 ];
 // shoe size data

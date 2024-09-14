@@ -70,7 +70,7 @@ const CreateProduct = () => {
     newForm.append("discountPrice", discountPrice);
     newForm.append("stock", stock);
     newForm.append("shopId", seller._id);
-    newForm.append("shoe_size", "7");
+    newForm.append("shoe_size", shoe_size);
     setTimeout(() => {
       dispatch(
         createProduct({
@@ -82,7 +82,7 @@ const CreateProduct = () => {
           discountPrice,
           stock,
           shopId: seller._id,
-          shoe_size: "7",
+          shoe_size,
           images,
         })
       );

@@ -9,53 +9,49 @@ const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
-const upload = require("../middleware/upload");
 
 // create shop
-router.post(
-  "/create-shop",
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      console.log("here");
-      const { email } = req.body;
-      const sellerEmail = await Shop.findOne({ email });
-      if (sellerEmail) {
-        return next(new ErrorHandler("User already exists", 400));
-      }
-      console.log("here request create shop");
-      console.log(req.body);
-
-      const seller = {
-        name: req.body.name,
-        email: email,
-        password: req.body.password,
-        address: req.body.address,
-        phoneNumber: req.body.phoneNumber,
-        zipCode: req.body.zipCode,
-      };
-
-      const activationToken = createActivationToken(seller);
-
-      const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
-
-      try {
-        await sendMail({
-          email: seller.email,
-          subject: "Activate your Shop",
-          message: `Hello ${seller.name}, please click on the link to activate your shop: ${activationUrl}`,
-        });
-        res.status(201).json({
-          success: true,
-          message: `please check your email:- ${seller.email} to activate your shop!`,
-        });
-      } catch (error) {
-        return next(new ErrorHandler(error.message, 500));
-      }
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 400));
+router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
+  try {
+    console.log("here")
+    const { email } = req.body;
+    const sellerEmail = await Shop.findOne({ email });
+    if (sellerEmail) {
+      return next(new ErrorHandler("User already exists", 400));
     }
-  })
-);
+    console.log("here request create shop")
+    console.log(req.body)
+    
+    const seller = {
+      name: req.body.name,
+      email: email,
+      password: req.body.password,
+      address: req.body.address,
+      phoneNumber: req.body.phoneNumber,
+      zipCode: req.body.zipCode,
+    };
+
+    const activationToken = createActivationToken(seller);
+
+    const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
+
+    try {
+      await sendMail({
+        email: seller.email,
+        subject: "Activate your Shop",
+        message: `Hello ${seller.name}, please click on the link to activate your shop: ${activationUrl}`,
+      });
+      res.status(201).json({
+        success: true,
+        message: `please check your email:- ${seller.email} to activate your shop!`,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+}));
 
 // create activation token
 const createActivationToken = (seller) => {
@@ -69,26 +65,27 @@ router.post(
   "/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      console.log("here activation");
+      console.log("here activation")
       const { activation_token } = req.body;
 
       const newSeller = jwt.verify(
         activation_token,
         process.env.ACTIVATION_SECRET
       );
-
+      
       if (!newSeller) {
         return next(new ErrorHandler("Invalid token", 400));
       }
       const { name, email, password, address, phoneNumber, zipCode } =
-        newSeller;
-
+      newSeller;
+      
       let seller = await Shop.findOne({ email });
-
+      
       if (seller) {
         return next(new ErrorHandler("User already exists", 400));
       }
-      console.log(newSeller);
+      console.log(newSeller)
+
 
       seller = await Shop.create({
         name,
@@ -99,10 +96,10 @@ router.post(
         phoneNumber,
       });
       console.log("seller");
-      console.log(seller);
+      console.log(seller)
       sendShopToken(seller, 201, res);
     } catch (error) {
-      console.log(error);
+      console.log(error)
       return next(new ErrorHandler(error.message, 500));
     }
   })
@@ -203,27 +200,30 @@ router.get(
 router.put(
   "/update-shop-avatar",
   isSeller,
-  upload.single("avatar"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const seller = await Shop.findByIdAndUpdate(
-        req.seller._id,
-        { $set: { avatar: { url: req.file.path?.split("\\")[2] } } },
-        { new: true }
-      );
+      let existsSeller = await Shop.findById(req.seller._id);
 
-      // const imageId = existsSeller.avatar.public_id;
+        const imageId = existsSeller.avatar.public_id;
 
-      // await cloudinary.v2.uploader.destroy(imageId);
+        await cloudinary.v2.uploader.destroy(imageId);
 
-      // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      //   folder: "avatars",
-      //   width: 150,
-      // });
+        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+          folder: "avatars",
+          width: 150,
+        });
+
+        existsSeller.avatar = {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        };
+
+  
+      await existsSeller.save();
 
       res.status(200).json({
         success: true,
-        seller: seller,
+        seller:existsSeller,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
