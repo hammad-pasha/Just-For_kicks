@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo 'No build step needed for Node.js Express backend'"
   },
   "author": "Muhammad Talha",
   "license": "ISC",
