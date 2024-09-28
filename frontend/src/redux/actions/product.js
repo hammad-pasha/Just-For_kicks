@@ -1,6 +1,6 @@
 import axios from "axios";
 import { server } from "../../server";
-
+export const maxDuration = 30;
 // create product
 export const createProduct = (
   {name,
