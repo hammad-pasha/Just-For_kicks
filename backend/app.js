@@ -17,9 +17,9 @@ app.use(cookieParser());
 app.use("/test", (req, res) => {
   res.send("Hello world!");
 });
-app.use("/api/v2/product/get-all-products", (req, res) => {
-  res.send("Hello from products");
-});
+// app.use("/api/v2/product/get-all-products", (req, res) => {
+//   res.send("Hello from products");
+// });
 
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
@@ -50,7 +50,7 @@ app.use("/api/v2/conversation", conversation);
 app.use("/api/v2/message", message);
 app.use("/api/v2/order", order);
 app.use("/api/v2/shop", shop);
-// app.use("/api/v2/product", product);
+app.use("/api/v2/product", product);
 app.use("/api/v2/event", event);
 app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);

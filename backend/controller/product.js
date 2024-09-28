@@ -129,8 +129,9 @@ router.delete(
 // get all products
 router.get(
   "/get-all-products",
-  catchAsyncErrors(async (req, res, next) => {
+  async (req, res, next) => {
     try {
+      console.log("Hello from get all products");
       const products = await Product.find().sort({ createdAt: -1 });
 
       res.status(200).json({
@@ -138,9 +139,10 @@ router.get(
         products,
       });
     } catch (error) {
+      console.log("Errors in products", error);
       return next(new ErrorHandler(error, 400));
     }
-  })
+  }
 );
 
 // review for a product
