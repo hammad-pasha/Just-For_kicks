@@ -7,7 +7,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "https://just-for-kicks.vercel.app",
+    origin: "https://just-for-kicks.vercel.app/",
     credentials: true,
   })
 );
